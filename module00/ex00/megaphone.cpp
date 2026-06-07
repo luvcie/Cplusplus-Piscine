@@ -12,7 +12,9 @@ int main(int argc, char **argv) {
             // toupper returns an int, so it needs to be casted with the static_cast template which checks
             // at compile time, and dynamic_cast would check at runtime.
             // the type you cast to is put inside the < > symbols.
-            std::cout << static_cast<char>(std::toupper(*str));
+            // cast to unsigned char first: char is signed, so high bytes (emoji, accents...)
+            // would be negative and toupper on a negative value is undefined behaviour
+            std::cout << static_cast<char>(std::toupper(static_cast<unsigned char>(*str)));
             ++str;
         }
     }
