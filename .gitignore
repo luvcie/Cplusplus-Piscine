@@ -4,6 +4,8 @@ a.out
 *.o
 *.obj
 *.exe
+module00/ex00/megaphone
+module00/ex01/phonebook
 
 # Libraries
 *.a
@@ -24,3 +26,6 @@ a.out
 
 # Subject PDFs
 *.pdf
+
+ref/
+stufffromintra/
