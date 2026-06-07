@@ -1,6 +1,6 @@
 #include "PhoneBook.hpp"
 #include <iostream>
-#include <string> // gives std::getline, it reads one whole line of input and stores in a std::string
+#include <string> // gives std::getline, it reads one whole line of input and stores in a std::string, also has .findfirstnotof
 #include <sstream> // gives string streams (std::istringstream)
 
 // keep asking for one field until the user types something that isn't empty
@@ -11,7 +11,11 @@ static bool prompt_field(const std::string &label, std::string &out) {
         std::cout << label;
         if (!std::getline(std::cin, out))
             return false;
-        if (!out.empty())
+        // accept only if there's at least one non-whitespace char,
+        // so "   " (just spaces) counts as empty too
+        // .find_first_not_of gives index of first non-whitespace char or npos if it finds none
+        // (and std::string::npos has two hops because npos lives inside string class which lives insid std namespace)
+        if (out.find_first_not_of(" \t\v\f\r\n") != std::string::npos)
             return true;
         std::cout << "Field can't be empty, try again." << std::endl;
     }
@@ -76,7 +80,6 @@ int main() {
         std::cout << "Enter command (ADD, SEARCH, EXIT): ";
         if (!std::getline(std::cin, command)) // ctrl-D / EOF, stop or we loop forever
             break;
-
         if (command == "ADD") {
             handle_add(phonebook);
         } else if (command == "SEARCH") {
