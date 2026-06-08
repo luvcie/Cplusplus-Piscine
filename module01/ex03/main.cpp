@@ -20,5 +20,10 @@ int main() {
         club.setType("some other type of club");
         jim.attack();
     }
+    {
+        // extra test: HumanB with no weapon, hits null check in attack()
+        HumanB alan("Alan Smithee");
+        alan.attack();
+    }
     return 0;
 }
