@@ -69,22 +69,32 @@ bool Fixed::operator!=(const Fixed& other) const {
     return this->value != other.value;
 }
 
-// articmetic done with float, float constructor rounds back to a raw val
+// adding and subtracting raw values works bc they're already on the same scale
+// multiplying doubles the scale so shift right by 8 to fix it, long long holds the intermediate bc it overflows int
+// dividing cancels the scale so shift left by 8 first, long long again bc the shift can overflow int
 
 Fixed Fixed::operator+(const Fixed& other) const {
-    return Fixed(this->toFloat() + other.toFloat());
+    Fixed result;
+    result.value = this->value + other.value;
+    return result;
 }
 
 Fixed Fixed::operator-(const Fixed& other) const {
-    return Fixed(this->toFloat() - other.toFloat());
+    Fixed result;
+    result.value = this->value - other.value;
+    return result;
 }
 
 Fixed Fixed::operator*(const Fixed& other) const {
-    return Fixed(this->toFloat() * other.toFloat());
+    Fixed result;
+    result.value = (int)((long long)this->value * other.value >> fractionalBits);
+    return result;
 }
 
 Fixed Fixed::operator/(const Fixed& other) const {
-    return Fixed(this->toFloat() / other.toFloat());
+    Fixed result;
+    result.value = (int)(((long long)this->value << fractionalBits) / other.value);
+    return result;
 }
 
 Fixed& Fixed::operator++() {
